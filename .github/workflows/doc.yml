@@ -1,0 +1,23 @@
+name: Doc Deploy
+
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  deploy-doc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          apt install python3-sphinx meson ninja-build
+      - name: Build docs
+        run: |
+          make docs
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./Builddir/doc/source/html
